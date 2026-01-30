@@ -1,0 +1,8 @@
+{
+  "comment": "NOTE: This is a demo file for development/testing only. In production, passwords should be hashed (e.g., with bcrypt) and stored securely.",
+  "teachers": {
+    "mr.smith": "password123",
+    "mrs.johnson": "securepass456",
+    "ms.williams": "teachpass789"
+  }
+}
