@@ -22,11 +22,14 @@
       </section>
     </main>
 
+    <!-- Global message container for operations outside modal -->
+    <div id="global-message" class="hidden"></div>
+
     <!-- Registration Modal -->
-    <div id="registration-modal" class="modal hidden">
+    <div id="registration-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>Register for <span id="modal-activity-name"></span></h3>
+        <span class="close" role="button" aria-label="Close registration modal" tabindex="0">&times;</span>
+        <h3 id="modal-heading">Register for <span id="modal-activity-name"></span></h3>
         <form id="signup-form">
           <div class="form-group">
             <label for="email">Student Email:</label>

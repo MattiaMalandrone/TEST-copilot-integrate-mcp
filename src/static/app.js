@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activityInput = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const globalMessageDiv = document.getElementById("global-message");
   const modal = document.getElementById("registration-modal");
   const closeBtn = document.querySelector(".close");
   const modalActivityName = document.getElementById("modal-activity-name");
@@ -85,6 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Show the modal
     modal.classList.remove("hidden");
+    
+    // Focus on the email input for accessibility
+    document.getElementById("email").focus();
   }
 
   // Close modal when clicking the X button
@@ -92,9 +96,24 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("hidden");
   });
 
+  // Close modal when pressing Enter or Space on the X button
+  closeBtn.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      modal.classList.add("hidden");
+    }
+  });
+
   // Close modal when clicking outside of it
   window.addEventListener("click", (event) => {
     if (event.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Close modal when pressing Escape key
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.classList.contains("hidden")) {
       modal.classList.add("hidden");
     }
   });
@@ -118,26 +137,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (response.ok) {
-        messageDiv.textContent = result.message;
-        messageDiv.className = "success";
+        globalMessageDiv.textContent = result.message;
+        globalMessageDiv.className = "success";
 
         // Refresh activities list to show updated participants
         fetchActivities();
       } else {
-        messageDiv.textContent = result.detail || "An error occurred";
-        messageDiv.className = "error";
+        globalMessageDiv.textContent = result.detail || "An error occurred";
+        globalMessageDiv.className = "error";
       }
 
-      messageDiv.classList.remove("hidden");
+      globalMessageDiv.classList.remove("hidden");
 
       // Hide message after 5 seconds
       setTimeout(() => {
-        messageDiv.classList.add("hidden");
+        globalMessageDiv.classList.add("hidden");
       }, 5000);
     } catch (error) {
-      messageDiv.textContent = "Failed to unregister. Please try again.";
-      messageDiv.className = "error";
-      messageDiv.classList.remove("hidden");
+      globalMessageDiv.textContent = "Failed to unregister. Please try again.";
+      globalMessageDiv.className = "error";
+      globalMessageDiv.classList.remove("hidden");
       console.error("Error unregistering:", error);
     }
   }
@@ -164,7 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
-        signupForm.reset();
+        
+        // Only clear the email field, not the activity
+        document.getElementById("email").value = "";
 
         // Refresh activities list to show updated participants
         fetchActivities();

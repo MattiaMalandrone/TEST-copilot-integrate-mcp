@@ -231,7 +231,6 @@ footer {
 
 /* Modal styles */
 .modal {
-  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -242,8 +241,8 @@ footer {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal:not(.hidden) {
-  display: block;
+.modal.hidden {
+  display: none;
 }
 
 .modal-content {
@@ -297,4 +296,19 @@ footer {
     width: 95%;
     padding: 20px;
   }
+}
+
+/* Global message container */
+#global-message {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  max-width: 600px;
+  width: 90%;
+  padding: 15px 20px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
