@@ -29,16 +29,8 @@ header h1 {
 }
 
 main {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-}
-
-@media (min-width: 768px) {
-  main {
-    grid-template-columns: 2fr 1fr;
-  }
+  display: block;
+  width: 100%;
 }
 
 section {
@@ -47,7 +39,24 @@ section {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px;
+}
+
+#activities-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  #activities-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  #activities-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 section h3 {
@@ -58,11 +67,14 @@ section h3 {
 }
 
 .activity-card {
-  margin-bottom: 15px;
-  padding: 15px;
+  margin-bottom: 0;
+  padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .activity-card h4 {
@@ -197,4 +209,106 @@ footer {
   margin-top: 30px;
   padding: 20px;
   color: #666;
+}
+
+/* Register button on activity cards */
+.register-btn {
+  margin-top: auto;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.register-btn:hover {
+  background-color: #45a049;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 30px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+}
+
+.modal h3 {
+  margin-bottom: 20px;
+  color: #1a237e;
+}
+
+.modal .form-group {
+  margin-bottom: 20px;
+}
+
+.modal button[type="submit"] {
+  width: 100%;
+  background-color: #1a237e;
+}
+
+.modal button[type="submit"]:hover {
+  background-color: #3949ab;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 20% auto;
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+/* Global message container */
+#global-message {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  max-width: 600px;
+  width: 90%;
+  padding: 15px 20px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
