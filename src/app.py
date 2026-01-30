@@ -5,9 +5,10 @@ A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
 
-from fastapi import FastAPI, HTTPException, Header, Response
+from fastapi import FastAPI, HTTPException, Header, Response, Body
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 import os
 from pathlib import Path
 import json
@@ -24,10 +25,18 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # Load teacher credentials from JSON file
 def load_teachers():
+    """Load teacher credentials from JSON file with error handling"""
     teachers_file = Path(__file__).parent / "teachers.json"
-    with open(teachers_file, 'r') as f:
-        data = json.load(f)
-    return data.get("teachers", {})
+    try:
+        with open(teachers_file, 'r') as f:
+            data = json.load(f)
+        return data.get("teachers", {})
+    except FileNotFoundError:
+        print(f"Warning: {teachers_file} not found. No teachers will be able to log in.")
+        return {}
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON in {teachers_file}: {e}")
+        return {}
 
 # In-memory session storage (token -> username)
 active_sessions = {}
@@ -96,6 +105,12 @@ def root():
     return RedirectResponse(url="/static/index.html")
 
 
+# Request models
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
 # Authentication helper function
 def verify_auth(authorization: Optional[str] = Header(None)) -> bool:
     """Verify if the request has a valid authentication token"""
@@ -112,19 +127,19 @@ def verify_auth(authorization: Optional[str] = Header(None)) -> bool:
 
 
 @app.post("/login")
-def login(username: str, password: str, response: Response):
+def login(credentials: LoginRequest, response: Response):
     """Login endpoint for teachers"""
     teachers = load_teachers()
     
     # Verify credentials
-    if username not in teachers or teachers[username] != password:
+    if credentials.username not in teachers or teachers[credentials.username] != credentials.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Generate session token
     token = secrets.token_urlsafe(32)
-    active_sessions[token] = username
+    active_sessions[token] = credentials.username
     
-    return {"token": token, "username": username}
+    return {"token": token, "username": credentials.username}
 
 
 @app.post("/logout")
